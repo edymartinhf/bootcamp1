@@ -21,7 +21,7 @@ public class ClientApiCreditos {
      */
     public Flux<CreditoProducto> getCreditos(String idCliente) {
         return webClient.get()
-                .uri("/creditos/" + idCliente)
+                .uri("/creditos/cliente/" + idCliente)
                 .retrieve()
                 .bodyToFlux(CreditoProducto.class);
     }

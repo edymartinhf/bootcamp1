@@ -44,14 +44,47 @@ public class CreditoResource {
     }
 
     /**
-     * Permite obtener productos de credito por id cliente
+     * Permite obtener id
      * @param id
      * @return
      */
     @GetMapping("/{id}")
-    public Flux<CreditoProducto> findClienteByIdCliente(@PathVariable String id) {
-        return creditoProductoRepository.findByIdCliente(id)
+    public Mono<CreditoProducto> findById(@PathVariable String id) {
+        return creditoUseCase.findById(id)
                 .map(this::fromCreditoProductoDaoToCreditoProductoDto);
+    }
+
+
+    /**
+     * Permite obtener productos de credito por id cliente
+     * @param idCliente
+     * @return
+     */
+    @GetMapping("/cliente/{idCliente}")
+    public Flux<CreditoProducto> findClienteByIdCliente(@PathVariable String idCliente) {
+        return creditoProductoRepository.findByIdCliente(idCliente)
+                .map(this::fromCreditoProductoDaoToCreditoProductoDto);
+    }
+
+    /**
+     * Permite actualizar informacion de producto de creditos
+     * @param creditoProductoPost
+     * @return
+     */
+    @PutMapping
+    public Mono<CreditoProducto> updateCreditProduct(@RequestBody CreditoProductoPost creditoProductoPost) {
+        return creditoUseCase.update(this.fromCreditoProductoPostToCreditoProductoDao(creditoProductoPost))
+                .map(this::fromCreditoProductoDaoToCreditoProductoDto);
+    }
+
+    /**
+     * Permite eliminar un producto de credito
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public Mono<Void> deleteCreditProduct(@PathVariable String id) {
+        return creditoUseCase.delete(id);
     }
 
 

@@ -4,6 +4,9 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Clase Entidad Cuenta Dao
+ */
 @Data
 @Document("cuentas")
 public class CuentaDao {

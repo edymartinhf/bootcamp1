@@ -41,16 +41,43 @@ public class CuentaResource {
         return cuentaUseCase.findAll().map(this::fromCuentaDaoToCuentaDto);
     }
 
+    /**
+     * Permite obtener credito por id
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Mono<Cuenta> findById(@PathVariable String id){
+        return cuentaUseCase.findById(id).map(this::fromCuentaDaoToCuentaDto);
+    }
 
     /**
      * Permite obtener listado de cuentas bancarias por id cliente
      * @param idCliente
      * @return
      */
-    @GetMapping("/{idCliente}")
+    @GetMapping("/cliente/{idCliente}")
     public Flux<Cuenta> findByIdCliente(@PathVariable String idCliente){
 
         return cuentaUseCase.findByIdCliente(idCliente).map(this::fromCuentaDaoToCuentaDto);
+    }
+
+    /**
+     * Permite actualizar cuenta
+     * @param cuenta
+     * @return
+     */
+    @PutMapping
+    public Mono<Cuenta> updateAccount(@RequestBody CuentaPost cuenta) {
+        return cuentaUseCase.update(this.fromCuentaPostToCuentaDao(cuenta))
+                .map(this::fromCuentaDaoToCuentaDto);
+    }
+
+
+    @DeleteMapping
+    public Mono<Void> deleteAccount(@PathVariable String id) {
+        return cuentaUseCase.delete(id);
+
     }
 
     private Cuenta fromCuentaDaoToCuentaDto(CuentaDao cuentaDao) {

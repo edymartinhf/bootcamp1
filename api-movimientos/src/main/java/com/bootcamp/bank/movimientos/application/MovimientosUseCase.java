@@ -22,27 +22,33 @@ public class MovimientosUseCase {
 
     public Mono<Movimiento> getMovimientos(String id){
 
-        return clientApiPagos.getPagos(id).collectList().map(l-> {
-            Movimiento mov=new Movimiento();
-            mov.setPagosTarjetaCredito(l);
-            return mov;
-        }).flatMap(n -> {
-            return clientApiConsumos.getConsumos(id).collectList().map(e->{
-                Movimiento mov=new Movimiento();
-                mov.setPagosTarjetaCredito(n.getPagosTarjetaCredito());
-                mov.setCargosConsumoTarjetaCredito(e);
-                return mov;
-            });
-        }).flatMap(c->{
-            return clientApiOperaciones.getOperaciones(id).collectList().map(e->{
-                Movimiento mov=new Movimiento();
-                mov.setIdCliente(id);
-                mov.setPagosTarjetaCredito(c.getPagosTarjetaCredito());
-                mov.setCargosConsumoTarjetaCredito(c.getCargosConsumoTarjetaCredito());
-                mov.setOperacionesCuentasCorriente(e);
-                return mov;
-            });
-        });
+        return clientApiPagos.getPagos(id)
+                .collectList()
+                .map(l-> {
+                    Movimiento mov=new Movimiento();
+                    mov.setPagosTarjetaCredito(l);
+                    return mov;
+                }).flatMap(n -> {
+                    return clientApiConsumos.getConsumos(id)
+                            .collectList()
+                            .map(e->{
+                                Movimiento mov=new Movimiento();
+                                mov.setPagosTarjetaCredito(n.getPagosTarjetaCredito());
+                                mov.setCargosConsumoTarjetaCredito(e);
+                                return mov;
+                            });
+                }).flatMap(c->{
+                    return clientApiOperaciones.getOperaciones(id)
+                            .collectList()
+                            .map(e->{
+                                Movimiento mov=new Movimiento();
+                                mov.setIdCliente(id);
+                                mov.setPagosTarjetaCredito(c.getPagosTarjetaCredito());
+                                mov.setCargosConsumoTarjetaCredito(c.getCargosConsumoTarjetaCredito());
+                                mov.setOperacionesCuentasCorriente(e);
+                                return mov;
+                            });
+                });
 
 
     }

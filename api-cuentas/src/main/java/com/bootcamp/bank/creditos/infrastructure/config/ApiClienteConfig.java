@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ApiClienteConfig {
-    @Bean
+    @Bean("clientClientes")
     public WebClient webClient() {
         return WebClient.create("http://localhost:8081"); // Cambia la URL y el puerto según tu API REST local
     }

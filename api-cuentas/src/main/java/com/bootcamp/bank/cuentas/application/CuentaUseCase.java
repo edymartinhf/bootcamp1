@@ -1,16 +1,17 @@
 package com.bootcamp.bank.cuentas.application;
 
+import com.bootcamp.bank.creditos.infrastructure.client.ClientApiClientes;
 import com.bootcamp.bank.creditos.infrastructure.repository.CuentaRepository;
 import com.bootcamp.bank.creditos.infrastructure.repository.dao.CuentaDao;
 import com.bootcamp.bank.creditos.infrastructure.rest.dto.Cliente;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -24,13 +25,28 @@ import java.util.function.Function;
 @Slf4j
 public class CuentaUseCase {
 
-
-
     private final CuentaRepository cuentaRepository;
 
-    private final WebClient webClient;
     private static Environment environment;
 
+    @Autowired
+    @Qualifier("clientClientes")
+    private static ClientApiClientes clientApiClientes;
+
+    @Value("${tipo.cliente.personal}")
+    private final String TIPO_CLIENTE_PERSONAL;
+
+    @Value("${tipo.cliente.empresarial}")
+    private final String TIPO_CLIENTE_EMPRESARIAL;
+
+    @Value("${tipo.cuenta.ahorro}")
+    private final String TIPO_CUENTA_AHORRO;
+
+    @Value("${tipo.cuenta.corriente}")
+    private final String TIPO_CUENTA_CORRIENTE;
+
+    @Value("${tipo.cuenta.plazo.fijo}")
+    private final String TIPO_CUENTA_PLAZO_FIJO;
 
     /**
      * Permite registrar una cuenta
@@ -47,15 +63,11 @@ public class CuentaUseCase {
 
     public Mono<CuentaDao> save( CuentaDao cuentaDao) {
 
-        return webClient
-                .get()
-                .uri("/clientes/" + cuentaDao.getIdCliente())
-                .retrieve()
-                .bodyToMono(Cliente.class)
+         return clientApiClientes.getClientes(cuentaDao.getIdCliente())
                 .switchIfEmpty(Mono.just(new Cliente()))
                 .flatMap(c -> {
                     log.info("cliente = "+c.toString());
-                    if (c.getTipoCli().equals("PER")) {
+                    if (c.getTipoCli().equals(TIPO_CLIENTE_PERSONAL)) {
                         log.info("cuenta  personal");
                         asignacionFlagsSegunTipoCuenta.apply(cuentaDao);
 
@@ -90,6 +102,16 @@ public class CuentaUseCase {
         return cuentaRepository.findAll();
     }
 
+
+    /**
+     * Permite obtener cuenta por id
+     * @param id
+     * @return
+     */
+    public Mono<CuentaDao> findById(String id){
+        return cuentaRepository.findById(id);
+    }
+
     /**
      * Permite obtener las cuenta existentes por el id de cliente
      * @param idCliente
@@ -100,8 +122,26 @@ public class CuentaUseCase {
         return cuentaRepository.findByIdCliente(idCliente);
     }
 
+    /**
+     * Permite actualizar la cuenta
+     * @param cuentaDao
+     * @return
+     */
+    public Mono<CuentaDao> update( CuentaDao cuentaDao) {
+        return cuentaRepository.save(cuentaDao);
+    }
+
+    /**
+     * Permite eliminar una cuenta
+     * @param id
+     * @return
+     */
+    public Mono<Void> delete( String id) {
+        return cuentaRepository.deleteById(id);
+    }
 
     Function<CuentaDao,CuentaDao> asignacionFlagsSegunTipoCuenta = cta -> {
+
         int randomNumber = generateRandomNumber(1, 1000);
         switch (cta.getTipoCuenta()) {
             case "AHO" -> {

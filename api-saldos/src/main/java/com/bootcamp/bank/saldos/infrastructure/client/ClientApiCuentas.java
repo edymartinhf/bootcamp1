@@ -21,7 +21,7 @@ public class ClientApiCuentas {
      */
     public Flux<Cuenta> getCuentas(String idCliente) {
         return webClient.get()
-                .uri("/cuentas/" + idCliente)
+                .uri("/cuentas/cliente/" + idCliente)
                 .retrieve()
                 .bodyToFlux(Cuenta.class);
     }

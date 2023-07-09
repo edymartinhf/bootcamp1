@@ -10,6 +10,8 @@ public class CreditoProducto {
     private String  numeroTarjeta;
     private String  fechaCreacion;
     private Double  lineaCredito;
+    private Double  consumos;
+    private Double  pagos;
 
 
 }
