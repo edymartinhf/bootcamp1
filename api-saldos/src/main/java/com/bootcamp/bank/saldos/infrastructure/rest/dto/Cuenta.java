@@ -15,5 +15,7 @@ public class Cuenta {
     private Boolean flgComisionMantenimiento;
     private Boolean flgLimiteMovMensual;
     private Integer numMaximoMovimientos;
+    private Double abonos;
+    private Double cargos;
 
 }

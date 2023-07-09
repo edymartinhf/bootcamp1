@@ -19,12 +19,12 @@ public class ClientApiOperaciones {
 
     /**
      * Permite obtener operaciones de cliente del api-cuentas-operaciones
-     * @param idCliente
+     * @param numeroCuenta
      * @return
      */
-    public Flux<OperacionCta> getOperacionesPorNumeroCuenta(String idCliente) {
+    public Flux<OperacionCta> getOperacionesPorNumeroCuenta(String numeroCuenta,String tipoOperacion) {
         return webClient.get()
-                .uri("/operaciones/cuentas/numero-cuenta/" + idCliente)
+                .uri("/operaciones/cuentas/numero-cuenta/" + numeroCuenta)
                 .retrieve()
                 .bodyToFlux(OperacionCta.class);
     }
