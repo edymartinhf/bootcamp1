@@ -5,6 +5,7 @@ import com.bootcamp.bank.creditos.infrastructure.repository.CreditoProductoRepos
 import com.bootcamp.bank.creditos.infrastructure.repository.dao.CreditoProductoDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -20,6 +21,9 @@ public class CreditoUseCase {
 
     private final CreditoProductoRepository creditoProductoRepository;
 
+    @Value("${tipo.credito.personal}")  String tipoCreditoPersonal;
+    @Value("${tipo.credito.empresarial}")  String tipoCreditoEmpresarial;
+    @Value("${tipo.credito.tarjeta.credito}") String tipoCreditoTarjeta;
 
     /**
      * Generacion de creditos
@@ -28,7 +32,7 @@ public class CreditoUseCase {
      */
     public Mono<CreditoProductoDao> save(CreditoProductoDao creditoProductoDao) {
         creditoProductoDao = creditoPorTipo.apply(creditoProductoDao);
-        if (creditoProductoDao.getTipoCredito().equals("PER")){
+        if (creditoProductoDao.getTipoCredito().equals(tipoCreditoPersonal)){
             log.info("credito personal - id cliente :"+creditoProductoDao.getIdCliente());
             return creditoProductoRepository.findByIdCliente(creditoProductoDao.getIdCliente())
                     .next()
@@ -70,6 +74,7 @@ public class CreditoUseCase {
     }
 
     Function<CreditoProductoDao,CreditoProductoDao> creditoPorTipo = cred -> {
+
         int randomNumber = Util.generateRandomNumber(1, 100000);
         switch (cred.getTipoCredito()) {
             case "PER" -> {
@@ -82,6 +87,13 @@ public class CreditoUseCase {
                 cred.setNumeroCredito("EMP"+Integer.toString(randomNumber));
                 cred.setFechaCreacion (Util.getCurrentDateAsString("dd/MM/yyyy"));
                 cred.setLineaCredito(50000.00); // linea de credito referencial
+                cred.setEstado("ACT");
+            }
+            case "TJC" -> {
+                cred.setNumeroCredito("TJC"+Integer.toString(randomNumber));
+                cred.setNumeroTarjeta("TAR-"+Integer.toString(randomNumber));
+                cred.setFechaCreacion (Util.getCurrentDateAsString("dd/MM/yyyy"));
+                cred.setLineaCredito(25000.00); // linea de credito referencial
                 cred.setEstado("ACT");
             }
             default -> {

@@ -34,19 +34,19 @@ public class CuentaUseCase {
     private static ClientApiClientes clientApiClientes;
 
     @Value("${tipo.cliente.personal}")
-    private final String TIPO_CLIENTE_PERSONAL;
+    private String TIPO_CLIENTE_PERSONAL;
 
     @Value("${tipo.cliente.empresarial}")
-    private final String TIPO_CLIENTE_EMPRESARIAL;
+    private String TIPO_CLIENTE_EMPRESARIAL;
 
     @Value("${tipo.cuenta.ahorro}")
-    private final String TIPO_CUENTA_AHORRO;
+    private String TIPO_CUENTA_AHORRO;
 
     @Value("${tipo.cuenta.corriente}")
-    private final String TIPO_CUENTA_CORRIENTE;
+    private String TIPO_CUENTA_CORRIENTE;
 
     @Value("${tipo.cuenta.plazo.fijo}")
-    private final String TIPO_CUENTA_PLAZO_FIJO;
+    private String TIPO_CUENTA_PLAZO_FIJO;
 
     /**
      * Permite registrar una cuenta
