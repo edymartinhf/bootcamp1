@@ -5,7 +5,6 @@ import com.bootcamp.bank.creditos.infrastructure.repository.CreditoProductoRepos
 import com.bootcamp.bank.creditos.infrastructure.repository.dao.CreditoProductoDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -15,20 +14,12 @@ import java.util.function.Function;
  * Creditos Logica Negocio
  */
 @Component
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class CreditoUseCase {
 
     private final CreditoProductoRepository creditoProductoRepository;
 
-    @Value("${tipo.credito.personal}")
-    private final String TIPO_CREDITO_PERSONAL;
-
-    @Value("${tipo.credito.empresarial}")
-    private final String TIPO_CREDITO_EMPRESARIAL;
-
-    @Value("${tipo.credito.tarjeta.credito}")
-    private final String TIPO_CREDITO_TARJETA;
 
     /**
      * Generacion de creditos
@@ -37,7 +28,7 @@ public class CreditoUseCase {
      */
     public Mono<CreditoProductoDao> save(CreditoProductoDao creditoProductoDao) {
         creditoProductoDao = creditoPorTipo.apply(creditoProductoDao);
-        if (creditoProductoDao.getTipoCredito().equals(TIPO_CREDITO_PERSONAL)){
+        if (creditoProductoDao.getTipoCredito().equals("PER")){
             log.info("credito personal - id cliente :"+creditoProductoDao.getIdCliente());
             return creditoProductoRepository.findByIdCliente(creditoProductoDao.getIdCliente())
                     .next()
@@ -52,6 +43,7 @@ public class CreditoUseCase {
     }
 
     /**
+     * Permite buscar un credito por id
      * @param id
      * @return
      */
@@ -60,6 +52,7 @@ public class CreditoUseCase {
     }
 
     /**
+     * Permite actualizar un credito producto
      * @param creditoProductoDao
      * @return
      */
@@ -68,6 +61,7 @@ public class CreditoUseCase {
     }
 
     /**
+     * Permite eliminar un producto credito por id
      * @param id
      * @return
      */
