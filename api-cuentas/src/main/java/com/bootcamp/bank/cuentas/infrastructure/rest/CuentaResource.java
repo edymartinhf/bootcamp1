@@ -1,9 +1,9 @@
-package com.bootcamp.bank.creditos.infrastructure.rest;
+package com.bootcamp.bank.cuentas.infrastructure.rest;
 
+import com.bootcamp.bank.cuentas.infrastructure.repository.dao.CuentaDao;
+import com.bootcamp.bank.cuentas.infrastructure.rest.dto.Cuenta;
+import com.bootcamp.bank.cuentas.infrastructure.rest.dto.CuentaPost;
 import com.bootcamp.bank.cuentas.application.CuentaUseCase;
-import com.bootcamp.bank.creditos.infrastructure.repository.dao.CuentaDao;
-import com.bootcamp.bank.creditos.infrastructure.rest.dto.Cuenta;
-import com.bootcamp.bank.creditos.infrastructure.rest.dto.CuentaPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;

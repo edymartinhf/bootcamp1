@@ -1,6 +1,6 @@
-package com.bootcamp.bank.creditos.infrastructure.client;
+package com.bootcamp.bank.cuentas.infrastructure.client;
 
-import com.bootcamp.bank.creditos.infrastructure.rest.dto.Cliente;
+import com.bootcamp.bank.cuentas.infrastructure.rest.dto.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

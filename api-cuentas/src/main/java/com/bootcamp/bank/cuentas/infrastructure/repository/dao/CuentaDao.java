@@ -1,9 +1,15 @@
-package com.bootcamp.bank.creditos.infrastructure.rest.dto;
+package com.bootcamp.bank.cuentas.infrastructure.repository.dao;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+/**
+ * Clase Entidad Cuenta Dao
+ */
 @Data
-public class Cuenta {
+@Document("cuentas")
+public class CuentaDao {
     @Id
     private String  id;
     private String  idCliente;
@@ -14,5 +20,6 @@ public class Cuenta {
     private Boolean flgComisionMantenimiento;
     private Boolean flgLimiteMovMensual;
     private Integer numMaximoMovimientos;
+
 
 }

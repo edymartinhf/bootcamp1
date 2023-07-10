@@ -1,4 +1,4 @@
-package com.bootcamp.bank.creditos.infrastructure.config;
+package com.bootcamp.bank.cuentas.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

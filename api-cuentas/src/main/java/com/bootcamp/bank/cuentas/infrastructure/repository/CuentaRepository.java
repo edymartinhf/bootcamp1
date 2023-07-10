@@ -1,6 +1,6 @@
-package com.bootcamp.bank.creditos.infrastructure.repository;
+package com.bootcamp.bank.cuentas.infrastructure.repository;
 
-import com.bootcamp.bank.creditos.infrastructure.repository.dao.CuentaDao;
+import com.bootcamp.bank.cuentas.infrastructure.repository.dao.CuentaDao;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,9 @@
 package com.bootcamp.bank.cuentas.application;
 
-import com.bootcamp.bank.creditos.infrastructure.client.ClientApiClientes;
-import com.bootcamp.bank.creditos.infrastructure.repository.CuentaRepository;
-import com.bootcamp.bank.creditos.infrastructure.repository.dao.CuentaDao;
-import com.bootcamp.bank.creditos.infrastructure.rest.dto.Cliente;
+import com.bootcamp.bank.cuentas.infrastructure.client.ClientApiClientes;
+import com.bootcamp.bank.cuentas.infrastructure.repository.CuentaRepository;
+import com.bootcamp.bank.cuentas.infrastructure.repository.dao.CuentaDao;
+import com.bootcamp.bank.cuentas.infrastructure.rest.dto.Cliente;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;

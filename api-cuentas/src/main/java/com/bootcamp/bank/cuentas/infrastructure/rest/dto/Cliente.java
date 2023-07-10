@@ -1,4 +1,4 @@
-package com.bootcamp.bank.creditos.infrastructure.rest.dto;
+package com.bootcamp.bank.cuentas.infrastructure.rest.dto;
 
 import lombok.Data;
 
