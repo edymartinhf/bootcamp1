@@ -1,6 +1,7 @@
 package com.bootcamp.bank.creditos.application;
 
 import com.bootcamp.bank.creditos.application.util.Util;
+import com.bootcamp.bank.creditos.infrastructure.client.ClientApiClientes;
 import com.bootcamp.bank.creditos.infrastructure.repository.CreditoProductoRepository;
 import com.bootcamp.bank.creditos.infrastructure.repository.dao.CreditoProductoDao;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ public class CreditoUseCase {
 
     private final CreditoProductoRepository creditoProductoRepository;
 
+    private final ClientApiClientes clientApiClientes;
+
     @Value("${tipo.credito.personal}")  String tipoCreditoPersonal;
     @Value("${tipo.credito.empresarial}")  String tipoCreditoEmpresarial;
     @Value("${tipo.credito.tarjeta.credito}") String tipoCreditoTarjeta;
@@ -34,14 +37,27 @@ public class CreditoUseCase {
         creditoProductoDao = creditoPorTipo.apply(creditoProductoDao);
         if (creditoProductoDao.getTipoCredito().equals(tipoCreditoPersonal)){
             log.info("credito personal - id cliente :"+creditoProductoDao.getIdCliente());
-            return creditoProductoRepository.findByIdCliente(creditoProductoDao.getIdCliente())
-                    .next()
-                    .switchIfEmpty(creditoProductoRepository.save(creditoProductoDao));
 
+            CreditoProductoDao finalCreditoProductoDao = creditoProductoDao;
+            return clientApiClientes.getClientes(creditoProductoDao.getIdCliente())
+                        .switchIfEmpty(Mono.error(new Exception()))
+                        .flatMap(c -> {
+                            return creditoProductoRepository.findByIdCliente(finalCreditoProductoDao.getIdCliente())
+                                  .next()
+                                  .switchIfEmpty(creditoProductoRepository.save(finalCreditoProductoDao));
+
+                        });
 
         } else {
             log.info("credito empresarial - id cliente :"+creditoProductoDao.getIdCliente());
-            return creditoProductoRepository.save(creditoProductoDao);
+
+            CreditoProductoDao finalCreditoProductoDao = creditoProductoDao;
+            return clientApiClientes.getClientes(creditoProductoDao.getIdCliente())
+                    .switchIfEmpty(Mono.error(new Exception())
+                    ).flatMap(c->{
+                        log.info("se encontro cliente "+c.getId()+" nombre:"+c.getNombre());
+                        return creditoProductoRepository.save(finalCreditoProductoDao);
+                    });
         }
 
     }
