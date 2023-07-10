@@ -50,6 +50,7 @@ public class SaldosUseCase {
                         return Mono.zip(getConsumnos(cred.getNumeroCredito()), getPagos(cred.getNumeroCredito()), (consumos,pagos)->{
                             cred.setPagos(pagos);
                             cred.setConsumos(consumos);
+                            cred.setSaldo(cred.getLineaCredito()+(cred.getConsumos()*-1)+cred.getPagos());
                             return  cred;
                         });
 
@@ -69,6 +70,7 @@ public class SaldosUseCase {
                         return Mono.zip(getOperacionesPorTipo(cue.getNumeroCuenta(),"DEP"), getOperacionesPorTipo(cue.getNumeroCuenta(),"RET"), (deposito,retiro)->{
                             cue.setAbonos(deposito);
                             cue.setCargos(retiro);
+                            cue.setSaldo(cue.getAbonos()+(cue.getCargos()*-1));
                             return  cue;
                         });
                     })
@@ -83,6 +85,7 @@ public class SaldosUseCase {
                     });
         });
     }
+
 
     /**
      * Permite calcular los consumos por numero de credito

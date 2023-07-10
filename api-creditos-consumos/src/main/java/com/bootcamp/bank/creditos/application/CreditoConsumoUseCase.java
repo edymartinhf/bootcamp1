@@ -10,6 +10,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
+/**
+ * Clase Consumos Credito
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -18,6 +21,11 @@ public class CreditoConsumoUseCase {
     private final CreditoConsumosRepository creditoConsumosRepository;
 
 
+    /**
+     * Permite registrar consumos tarjeta credito
+     * @param operationCtaDao
+     * @return
+     */
     public Mono<CargoConsumoDao> save(CargoConsumoDao operationCtaDao){
         operationCtaDao = asignarValoresCargo.apply(operationCtaDao);
         return creditoConsumosRepository.save(operationCtaDao);
