@@ -7,4 +7,7 @@ api_creditos_pagos  :8086
 api-movimientos :8087
 api-saldos :8088
 
+eureka_server:8761
+
+
 
