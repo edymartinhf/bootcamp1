@@ -13,4 +13,6 @@ public interface OperacionesCuentaRepository extends ReactiveMongoRepository<Ope
 
     @Query("{'numeroCuenta':?0}")
     Flux<OperacionCtaDao> findByNumeroCuenta(String numeroCuenta);
+
+    Flux<OperacionCtaDao> findByNumeroCuentaAndTipoOperacion(String numeroCuenta,String tipoOperacion);
 }

@@ -6,6 +6,7 @@ import com.bootcamp.bank.operaciones.infrastructure.repository.dao.OperacionCtaD
 import com.bootcamp.bank.operaciones.infrastructure.rest.dto.OperacionCta;
 import com.bootcamp.bank.operaciones.infrastructure.rest.dto.OperacionCtaPost;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/operaciones/cuentas")
 @RequiredArgsConstructor
+@Slf4j
 public class OperacionesCuentaResource {
 
     private final OperacionesCuentaRepository operacionesCuentaRepository;
@@ -34,17 +36,27 @@ public class OperacionesCuentaResource {
                 map(this::fromOperacionClienteDaoToOperacionDto);
     }
 
+
+    /**
+     * Permite visualizar depositos y retiros
+     * @return
+     */
+    @GetMapping
+    public Flux<OperacionCta> findAll(){
+        return operacionesCuentasUseCase.findAll().
+                map(this::fromOperacionClienteDaoToOperacionDto);
+    }
+
     /**
      * Permite obtener operaciones deposito y retiro por id cliente
      * @param idCliente
      * @return
      */
-    @GetMapping("/{id}")
-    public Flux<OperacionCta> findOperacionesByIdCliente(@PathVariable(name = "id") String idCliente) {
+    @GetMapping("/cliente/{idCliente}")
+    public Flux<OperacionCta> findOperacionesByIdCliente(@PathVariable(name = "idCliente") String idCliente) {
         return operacionesCuentaRepository.findByIdCliente(idCliente).map(this::fromOperacionClienteDaoToOperacionDto);
 
     }
-
 
     /**
      * Permite obtener operaciones por numero cuenta
@@ -52,11 +64,29 @@ public class OperacionesCuentaResource {
      * @return
      */
     @GetMapping("/numero-cuenta/{numeroCuenta}")
-    public Flux<OperacionCta> findPagosByNumeroCuenta(@PathVariable(name = "numeroCuenta") String numeroCuenta) {
-        return operacionesCuentaRepository.findByNumeroCuenta (numeroCuenta)
+    public Flux<OperacionCta> findByNumeroCuenta(@PathVariable(name = "numeroCuenta") String numeroCuenta) {
+        return operacionesCuentasUseCase.findByNumeroCuenta(numeroCuenta)
                 .map(this::fromOperacionClienteDaoToOperacionDto);
 
     }
+
+    /**
+     * Permite Obtener tipos por numero de cuenta y tipo
+     * @param numeroCuenta
+     * @param tipoOperacion
+     * @return
+     */
+    @GetMapping("/cuenta/{numeroCuenta}/tipo/{tipoOperacion}")
+    public Flux<OperacionCta> findByNumeroCuentaTipo(
+            @PathVariable(name = "numeroCuenta") String numeroCuenta,
+            @PathVariable(name = "tipoOperacion") String tipoOperacion
+    ) {
+        log.info("peticion numeroCuenta:"+numeroCuenta+" tipoOperacion:"+tipoOperacion);
+        return operacionesCuentasUseCase.findByNumeroCuentaAndTipoOperacion(numeroCuenta,tipoOperacion)
+                .map(this::fromOperacionClienteDaoToOperacionDto);
+
+    }
+
 
     private OperacionCta fromOperacionClienteDaoToOperacionDto(OperacionCtaDao operacionCtaDao) {
         OperacionCta operacionCta = new OperacionCta();

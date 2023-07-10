@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+/**
+ * Clase Obtencion Saldos
+ */
 @RestController
 @RequestMapping("/saldos")
 @RequiredArgsConstructor
@@ -16,6 +19,10 @@ public class SaldosResource {
 
     private final SaldosUseCase saldosUseCase;
 
+    /**
+     * Permite obtener saldos por idCliente
+     * @return
+     */
     @GetMapping("/{id}")
     public Mono<SaldoResponse> getSaldos(@PathVariable String id){
         return saldosUseCase.getSaldos(id);

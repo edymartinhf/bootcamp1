@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Clase Casos de uso Saldos
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +30,11 @@ public class SaldosUseCase {
 
     private final ClientApiOperaciones clientApiOperaciones;
 
+    /**
+     * Permite obtener saldos por id cliente
+     * @param id
+     * @return
+     */
     public Mono<SaldoResponse> getSaldos(String id){
 
 
@@ -76,18 +84,34 @@ public class SaldosUseCase {
         });
     }
 
+    /**
+     * Permite calcular los consumos por numero de credito
+     * @param numeroCredito
+     * @return
+     */
     public Mono<Double> getConsumnos(String numeroCredito) {
         return clientApiConsumos
                 .getConsumosNumeroCredito(numeroCredito)
                 .reduce(0.00,(acum,e)->acum+e.getImporte());
     }
 
+    /**
+     * Permite obtener pagos por numero de credito
+     * @param numeroCredito
+     * @return
+     */
     public Mono<Double> getPagos(String numeroCredito) {
         return clientApiPagos
                 .getPagosNumeroCredito(numeroCredito)
                 .reduce(0.00,(acum,e)->acum+e.getImporte());
     }
 
+    /**
+     * Permite Obtener las operaciones por numero de cuenta y por tipo
+     * @param numeroCuenta
+     * @param tipo
+     * @return
+     */
     public Mono<Double> getOperacionesPorTipo(String numeroCuenta,String tipo) {
         return clientApiOperaciones
                 .getOperacionesPorNumeroCuenta(numeroCuenta,tipo)
